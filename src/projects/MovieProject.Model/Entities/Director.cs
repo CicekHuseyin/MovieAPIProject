@@ -1,13 +1,9 @@
-﻿namespace MovieProject.Model.Entities;
+﻿using Core.DataAccess.Entities;
 
-public sealed class Director
+namespace MovieProject.Model.Entities;
+
+public sealed class Director : Entity<long>
 {
-    public long Id { get; set; }
-
-    public DateTime CreatedTime { get; set; }
-
-    public DateTime? UpdatedTime { get; set; }
-
     public string Name { get; set; }
 
     public string Surname { get; set; }
