@@ -18,21 +18,27 @@ public abstract class EfRepositoryBase<TEntity, TId, TContext> : IRepository<TEn
     public TEntity Add(TEntity entity)
     {
         entity.CreatedTime = DateTime.UtcNow;
-        Context.Set<TEntity>().Add(entity);
+        Context.Entry(entity).State= EntityState.Added;
         Context.SaveChanges();
         return entity;
     }
 
     public TEntity Delete(TEntity entity)
     {
-        Context.Set<TEntity>().Remove(entity);
+        Context.Entry(entity).State=EntityState.Deleted;
         Context.SaveChanges();
         return entity;
     }
 
-    public List<TEntity> GetAll()
+    public List<TEntity> GetAll(bool include = true)
     {
-        return Context.Set<TEntity>().ToList();
+        //select [] from TENTITY where [] order by []
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include is false)
+        {
+            query = query.IgnoreAutoIncludes();
+        }
+        return query.ToList();
     }
 
     public TEntity? GetById(TId id)
@@ -43,8 +49,13 @@ public abstract class EfRepositoryBase<TEntity, TId, TContext> : IRepository<TEn
     public TEntity Update(TEntity entity)
     {
         entity.UpdatedTime = DateTime.UtcNow;
-        Context.Set<TEntity>().Update(entity);
+        Context.Entry(entity).State= EntityState.Modified;
         Context.SaveChanges();
         return entity;
+    }
+
+    public IQueryable<TEntity> Query(bool include = true)
+    {
+        return Context.Set<TEntity>();
     }
 }

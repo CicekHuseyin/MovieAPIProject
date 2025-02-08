@@ -8,5 +8,6 @@ public interface IRepository<TEntity,TId> where TEntity : Entity<TId>
     TEntity Update(TEntity entity);
     TEntity Delete(TEntity entity);
     TEntity? GetById(TId id);
-    List<TEntity> GetAll();
+    List<TEntity> GetAll(bool include = true);
+    IQueryable<TEntity> Query(bool include = true);
 }

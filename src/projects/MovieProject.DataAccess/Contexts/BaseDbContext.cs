@@ -1,14 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieProject.Model.Entities;
+using System.Reflection;
 
 namespace MovieProject.DataAccess.Contexts;
 
 public sealed class BaseDbContext : DbContext
 {
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public BaseDbContext(DbContextOptions opt): base(opt)
     {
-        optionsBuilder.UseSqlServer(@"Server=DESKTOP-KR485FT\SQLEXPRESS; Database=MovieProjectDb; user=sa; password=5665; TrustServerCertificate=true");
+        
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
     public DbSet<Artist> Artists { get; set; }

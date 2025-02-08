@@ -10,7 +10,7 @@ public sealed class Director : Entity<long>
 
     public string ImageUrl { get; set; }
 
-    public DateTime BirthDay { get; set; }
+    public DateTime? BirthDay { get; set; }
 
 
     public ICollection<Movie> Movies { get; set; }
