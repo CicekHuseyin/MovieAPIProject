@@ -1,6 +1,7 @@
 ﻿
 using Core.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Core.DataAccess.Repositories;
 
@@ -30,10 +31,20 @@ public abstract class EfRepositoryBase<TEntity, TId, TContext> : IRepository<TEn
         return entity;
     }
 
-    public List<TEntity> GetAll(bool include = true)
+    public List<TEntity> GetAll(Expression<Func<TEntity, bool>>? filter = null, bool include = true, bool enableTracking = true)
     {
         //select [] from TENTITY where [] order by []
         IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (filter is not null)
+        {
+            query = query.Where(filter);
+        }
+
+        if (enableTracking == false)
+        {
+            query = query.AsNoTracking();
+        }
+
         if (include is false)
         {
             query = query.IgnoreAutoIncludes();
@@ -54,8 +65,38 @@ public abstract class EfRepositoryBase<TEntity, TId, TContext> : IRepository<TEn
         return entity;
     }
 
-    public IQueryable<TEntity> Query(bool include = true)
+    public IQueryable<TEntity> Query()
     {
-        return Context.Set<TEntity>();
+        throw new NotImplementedException();
+    }
+
+    public TEntity? Get(Expression<Func<TEntity, bool>> filter, bool include = true, bool enableTracking = true)
+    {
+        IQueryable<TEntity> query = Query();
+        if (include is false)
+        {
+            query = query.IgnoreAutoIncludes();
+        }
+        if(enableTracking is false)
+        {
+            query = query.AsNoTracking();
+        }
+        return query.FirstOrDefault(filter);
+    }
+
+    public bool Any(Expression<Func<TEntity, bool>>? filter = null, bool enableTracking = true)
+    {
+        IQueryable<TEntity> query = Query();
+
+        if (enableTracking is false)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (filter is not null)
+        {
+            return query.Any(filter);
+        }
+        return query.Any();
     }
 }

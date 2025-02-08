@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MovieProject.DataAccess.Repositories.Abstracts;
 using MovieProject.Model.Dtos.Movies;
 using MovieProject.Model.Entities;
@@ -33,11 +34,18 @@ public class MovieService : IMovieService
 
     public void Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var movie = _movieRepository.Get(x => x.Id == id, enableTracking: false);
+        if (movie == null)
+        {
+            //exception fırlat
+        }
+        _movieRepository.Delete(movie!);
     }
 
     public List<MovieResponseDto> GetAll()
     {
+        //var movies = _movieRepository.GetAll(include:false);
+        //movie ye ait category ve director gözükmesin.
         var movies = _movieRepository.GetAll();
         var response = _mapper.Map<List<MovieResponseDto>>(movies);
         return response;
@@ -45,7 +53,13 @@ public class MovieService : IMovieService
 
     public List<MovieResponseDto> GetAllByCategoryId(int id)
     {
-        throw new NotImplementedException();
+        var movies = _movieRepository.GetAll(filter: x => x.CategoryId == id, enableTracking: true);
+        //.Query()
+        //.Where(x => x.CategoryId == id)
+        //.IgnoreAutoIncludes() category ve director alanları boş gelir.
+
+        var response = _mapper.Map<List<MovieResponseDto>>(movies);
+        return response;
     }
 
     public List<MovieResponseDto> GetAllByDirectorId(long id)

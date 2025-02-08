@@ -30,5 +30,12 @@ namespace MovieProject.API.Controllers
             var result = _movieService.GetAll();
             return Ok(result);
         }
+
+        [HttpGet("GetAllByCategoryId")]
+        public IActionResult GetAllByCategoryId(int categoryId)
+        {
+            var result = _movieService.GetAllByCategoryId(categoryId);
+            return Ok(result);
+        }
     }
 }
