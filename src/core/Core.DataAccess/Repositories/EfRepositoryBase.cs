@@ -67,7 +67,7 @@ public abstract class EfRepositoryBase<TEntity, TId, TContext> : IRepository<TEn
 
     public IQueryable<TEntity> Query()
     {
-        throw new NotImplementedException();
+        return Context.Set<TEntity>();
     }
 
     public TEntity? Get(Expression<Func<TEntity, bool>> filter, bool include = true, bool enableTracking = true)

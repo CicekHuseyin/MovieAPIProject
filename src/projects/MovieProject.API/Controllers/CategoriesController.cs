@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.CrossCuttingConcerns.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using MovieProject.DataAccess.Repositories.Abstracts;
 using MovieProject.Model.Dtos.Categories;
 using MovieProject.Model.Entities;
@@ -27,8 +28,17 @@ public class CategoriesController : ControllerBase
     [HttpPost("Add")]
     public IActionResult Add(CategoryAddRequestDto dto)
     {
-        _categoryService.Add(dto);
-        return Ok("Kategori Başarıyla Eklendi");
+        try
+        {
+            _categoryService.Add(dto);
+            return Ok("Kategori Başarıyla Eklendi");
+        }
+        catch (BusinessException ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+
     }
 
     [HttpGet("GetAll")]
@@ -41,22 +51,47 @@ public class CategoriesController : ControllerBase
     [HttpGet("GetById")]
     public IActionResult GetById(int id)
     {
-        var response= _categoryService.GetById(id);
-        return Ok(response);
+        try
+        {
+            var response = _categoryService.GetById(id);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
+
     }
 
     [HttpPut("Update")]
     public IActionResult Update(CategoryUpdateRequestDto dto)
     {
-        _categoryService.Update(dto);
-        return Ok("Kategori Başarıyla Güncellendi");
+        try
+        {
+            _categoryService.Update(dto);
+            return Ok("Kategori Başarıyla Güncellendi");
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
     }
 
     [HttpDelete("Delete")]
     public IActionResult Delete(int id)
-    { 
-        _categoryService.Delete(id);
-        return Ok("Kategori Başarıyla Silindi");
+    {
+        try
+        {
+            _categoryService.Delete(id);
+            return Ok("Kategori Başarıyla Silindi");
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
     }
 
 }
