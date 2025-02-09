@@ -1,4 +1,4 @@
-﻿using Core.CrossCuttingConcerns.Exceptions;
+﻿using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Mvc;
 using MovieProject.DataAccess.Repositories.Abstracts;
 using MovieProject.Model.Dtos.Categories;
