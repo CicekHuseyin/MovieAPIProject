@@ -9,13 +9,13 @@ namespace Core.CrossCuttingConcerns.Exceptions.Handlers;
 public sealed class HttpExceptionHandler : ExceptionHandler
 {
     private HttpResponse response;
-    public HttpResponse Response { get; set; }  
+    public HttpResponse Response { get; set; }
 
     protected override Task HandleException(NotFoundException notFoundException)
     {
         Response.StatusCode = StatusCodes.Status404NotFound;
-        NotFoundProblemDetails problem=new NotFoundProblemDetails(notFoundException.Message);
-        string details= JsonSerializer.Serialize(problem);
+        NotFoundProblemDetails problem = new NotFoundProblemDetails(notFoundException.Message);
+        string details = JsonSerializer.Serialize(problem);
         return Response.WriteAsync(details);
     }
 

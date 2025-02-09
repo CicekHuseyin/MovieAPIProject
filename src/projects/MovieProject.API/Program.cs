@@ -1,3 +1,4 @@
+using Core.CrossCuttingConcerns.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using MovieProject.DataAccess.Contexts;
 using MovieProject.DataAccess.Repositories.Abstracts;
@@ -18,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 //AddSingleton() : Uygulama boyunca 1 tane nesne üretir.
 //AddTransient() : Uygulamada her istek için ayrý nesne oluþturur.
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryMapper,CategoryAutoMapper>();
@@ -46,9 +48,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
