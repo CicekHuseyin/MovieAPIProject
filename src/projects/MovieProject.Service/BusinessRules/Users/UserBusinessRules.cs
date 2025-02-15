@@ -10,19 +10,26 @@ public class UserBusinessRules(IUserRepository userRepository)
     {
         bool isPresent = await userRepository.AnyAsync(x => x.UserName == username);
         if (!isPresent)
-            throw new NotFoundException(UsersMessages.UserNameMustBeUnique);
+            throw new BusinessException(UsersMessages.UserNameMustBeUnique);
     }
 
     public async Task EmailMustBeUniqueAsync(string email)
     {
         bool isPresent = await userRepository.AnyAsync(x=> x.Email == email);
         if (!isPresent)
-            throw new NotFoundException(UsersMessages.EmailMustBeUnique);
+            throw new BusinessException(UsersMessages.EmailMustBeUnique);
     }
 
     public async Task UserIsPresent (int id)
     {
         bool isPresent = await userRepository.AnyAsync(x=>x.Id == id);
+        if (!isPresent)
+            throw new NotFoundException(UsersMessages.UserNotFound);
+    }
+
+    public async Task SearchByEmailAsync(string email)
+    {
+        bool isPresent = await userRepository.AnyAsync(x => x.Email == email);
         if (!isPresent)
             throw new NotFoundException(UsersMessages.UserNotFound);
     }
