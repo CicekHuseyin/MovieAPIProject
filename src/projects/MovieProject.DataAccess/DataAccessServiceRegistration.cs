@@ -21,6 +21,7 @@ namespace MovieProject.DataAccess
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
+            services.AddScoped<UserRepository>();
 
             services.AddDbContext<BaseDbContext>(opt =>
             {

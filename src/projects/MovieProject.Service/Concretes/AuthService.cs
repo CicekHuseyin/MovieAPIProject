@@ -25,15 +25,16 @@ public sealed class AuthService : IAuthService
     public async Task<string> LoginAsync(LoginRequestDto requestDto, CancellationToken cancellationToken = default)
     {
         await _userBusinessRules.SearchByEmailAsync(requestDto.Email);
-        
-        var user =await _userService.GetByEmailAsync(requestDto.Email);
 
-        var verifyPassword = HashingHelper.VerifyPasswordHash(requestDto.Password,user.PasswordHash,user.PasswordSalt);
+        var user = await _userService.GetByEmailAsync(requestDto.Email, cancellationToken);
+
+        var verifyPassword = HashingHelper.VerifyPasswordHash(requestDto.Password, user.PasswordHash, user.PasswordSalt);
 
         if (!verifyPassword)
             throw new BusinessException(UsersMessages.PasswordIsWrong);
 
         return "Giriş Başarılı";
+
     }
 
     public async Task<string> RegisterAsync(RegisterRequestDto requestDto, CancellationToken cancellationToken = default)
@@ -44,6 +45,7 @@ public sealed class AuthService : IAuthService
 
         user.PasswordHash = hashResult.passwordHash;
         user.PasswordSalt = hashResult.passwordSalt;
+        user.Status = true;
 
         await _userService.AddAsync(user);
 

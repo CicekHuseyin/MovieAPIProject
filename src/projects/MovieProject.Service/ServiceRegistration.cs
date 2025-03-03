@@ -4,6 +4,7 @@ using MovieProject.Service.Abstracts;
 using MovieProject.Service.BusinessRules.Artists;
 using MovieProject.Service.BusinessRules.Categories;
 using MovieProject.Service.BusinessRules.Movies;
+using MovieProject.Service.BusinessRules.Users;
 using MovieProject.Service.Concretes;
 using MovieProject.Service.Helpers;
 using MovieProject.Service.Mappers.Categories;
@@ -25,6 +26,10 @@ public static class ServiceRegistration
         services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
         services.AddScoped<ICategoryMapper, CategoryAutoMapper>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<UserBusinessRules>();
         return services;
     }
 }

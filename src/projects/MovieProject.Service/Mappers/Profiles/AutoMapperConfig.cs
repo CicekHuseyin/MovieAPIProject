@@ -12,9 +12,9 @@ public sealed class AutoMapperConfig : Profile
 {
     public AutoMapperConfig()
     {
-        CreateMap<CategoryAddRequestDto,Category>();
-        CreateMap<CategoryUpdateRequestDto,Category>();
-        CreateMap<Category,CategoryResponseDto>();
+        CreateMap<CategoryAddRequestDto, Category>();
+        CreateMap<CategoryUpdateRequestDto, Category>();
+        CreateMap<Category, CategoryResponseDto>();
 
         CreateMap<MovieAddRequestDto, Movie>();
         CreateMap<MovieUpdateRequestDto, Movie>();
@@ -25,5 +25,6 @@ public sealed class AutoMapperConfig : Profile
         CreateMap<Artist, ArtistResponseDto>();
 
         CreateMap<User, UserResponseDto>();
+        CreateMap<RegisterRequestDto, User>();
     }
 }

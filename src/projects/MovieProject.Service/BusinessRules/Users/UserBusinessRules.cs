@@ -9,14 +9,14 @@ public class UserBusinessRules(IUserRepository userRepository)
     public async Task UserNameMustBeUniqueAsync(string username)
     {
         bool isPresent = await userRepository.AnyAsync(x => x.UserName == username);
-        if (!isPresent)
+        if (isPresent)
             throw new BusinessException(UsersMessages.UserNameMustBeUnique);
     }
 
     public async Task EmailMustBeUniqueAsync(string email)
     {
         bool isPresent = await userRepository.AnyAsync(x=> x.Email == email);
-        if (!isPresent)
+        if (isPresent)
             throw new BusinessException(UsersMessages.EmailMustBeUnique);
     }
 
