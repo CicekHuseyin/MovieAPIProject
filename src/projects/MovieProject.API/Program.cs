@@ -25,7 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
-
+object value = builder.Services.AddDataAccessDependencies(builder.Configuration);
 builder.Services.AddDataAccessDependencies(builder.Configuration);
 builder.Services.AddServiceDependencies();
 
